@@ -1,1 +1,25 @@
-
+<html manifest="unicon.appcache">
+<title>Unicon</title>
+<link rel="stylesheet" href="style.css">
+<!Combo Box Script>
+<script id="combo-box-script">
+function $(e){return document.getElementById(e)}HTMLElement.prototype.css=function(e,t){return arguments.length>1?this.style[e]=t:parseInt(document.defaultView.getComputedStyle(this).getPropertyValue(e))};function _CB(e,v){e.children[2].innerHTML="";for(var i of e.lang.split(","))e.children[2].innerHTML+=i.search(new RegExp(v,"i"))>-1?"<li onclick='this.parentElement.previousElementSibling.value=this.innerHTML'>"+i+"</li>":""}function _CBS(e){var ele = e.currentTarget.children[0];var dY = (e.deltaY>0?(ele.css('line-height')*(e.currentTarget.children.length)-e.currentTarget.css('max-height')):0);if(-ele.css('margin-top')*Math.sign(e.deltaY) < dY){ ele.css('margin-top',ele.css('margin-top') - Math.sign(e.deltaY)*50);}}
+</script>
+<script>
+function loadJSON(e){var t=new XMLHttpRequest
+t.overrideMimeType("application/json"),t.open("GET","unicon",!0),t.onreadystatechange=function(){4==t.readyState&&"200"==t.status&&e(t.responseText)},t.send(null)}function init(){loadJSON(function(e){unicon=JSON.parse(e),$("cat").lang=Object.keys(unicon).join(),t.r()})}function cat_onchange(e,t){$("units").innerHTML="",addRow(t),addRow(t),cu.length=0,cu[0]=t}function unit_onchange(e,t){e.parentElement.parentElement.nextElementSibling||addRow($("cat").children[1].value),e.parentElement.previousElementSibling.children[0].innerHTML=unicon[$("cat").children[1].value][t][0].replace(/\^(.*?)\^/g,"<sup>$1</sup>"),e.parentElement.parentElement.children[0].children[0].children[0].lang=unicon[$("cat").children[1].value][t][1],calc(e.parentElement.parentElement.children[0].children[0].children[0]),cu[e.parentElement.parentElement.rowIndex+1]=t}function addRow(val){var nr=$("units").insertRow(-1)
+nr.insertCell(0).innerHTML='<div class="combo-box"><input type="text" autocomplete="off" onkeyup="calc(this);"></input></div>',nr.insertCell(1).innerHTML='<div style="width:66px"></div>',nr.insertCell(2).innerHTML='<div id="unit" class="combo-box" lang="'+eval('Object.keys(unicon["'+val+'"]).join();')+'"><div onmouseover="_CB(event.target.parentElement,\'\')"></div><input type="text" onkeyup="_CB(event.target.parentElement,this.value)" onclick="this.select();" autocomplete="off" placeholder="Select Unit"  style=""/><ul onclick=";this.css(\'visibility\',\'hidden\');eval(this.parentElement.id+\'_onchange(this.parentElement,this.previousElementSibling.value)\')" onmouseout="this.css(\'visibility\',\'\')" onwheel="_CBS(event)" style="z-index:'+(1e3-$("units").getElementsByTagName("tr").length-1)+'"></ul></div>'}function calc(e){for(var t=$("units").getElementsByTagName("input"),n=0;n<t.length-2;n+=2)t[n]!=e&&(t[n].value=+(Math.round(t[n].lang/e.lang*e.value+"e+4")+"e-4"))}var unicon,cu=[],t={t:{},c:function(){if(cu[0]&&!(cu.length<2)){var e=prompt("Call new template as ",cu[0])
+e&&""!=e&&(t.t[e]?confirm(e+" already exists, Overwrite?")&&(t.t[e]=cu.slice(0),this.s()):(t.t[e]=cu.slice(0),this.s()))}},d:function(e){delete t.t[e],localStorage.setItem("Templates",JSON.stringify(t.t)),t.r()},l:function(e){$("cat").children[1].value=t.t[e][0],cat_onchange($("cat"),t.t[e][0])
+for(var n=1;n<t.t[e].length;n++)if(t.t[e][n]){var i=$("units").getElementsByTagName("input")[2*n-1]
+i.value=t.t[e][n],unit_onchange(i.parentElement,t.t[e][n])}else addRow(t.t[e][0])},r:function(){t.t=JSON.parse(localStorage.getItem("Templates"))||{},$("template").children[1].innerHTML='<li onclick="t.c();">Save As Template</li><li onclick="t.l(this.textContent.slice(0, -1))">'+Object.keys(t.t).sort().join('<div onclick="t.d(this.parentElement.textContent.slice(0, -1))" title="Remove this Template">X</div></li><li onclick="t.l(this.textContent.slice(0, -1))">')+'<div onclick="t.d(this.parentElement.textContent.slice(0, -1))" title="Remove this Template">X</div></li>'},s:function(){localStorage.setItem("Templates",JSON.stringify(t.t)),t.r()}}
+ </script>
+<body onload="init();">
+<table id="units">
+</table>
+<div id="cat" class="combo-box" lang="">
+<div onmouseover="_CB(event.target.parentElement,'')"></div>
+<input type="text" onkeyup="_CB(event.target.parentElement,this.value)" onfocus="this.select();"  autocomplete="off" placeholder="Select Category"/>
+<ul onclick="this.css('visibility','hidden');eval(this.parentElement.id+'_onchange(this.parentElement,this.previousElementSibling.value)')" onmouseout="this.css('visibility','')" onwheel="_CBS(event)"></ul>
+</div>
+<div id="template"><div>TEMPLATES</div><ul></ul></div>
+</body>
