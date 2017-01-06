@@ -1,1 +1,11 @@
-hello
+<html>
+<title>Calsci</title>
+<link rel="stylesheet" href="style.css">
+<script src="calsci.js"></script>
+<body onload="init();">
+<div id="calArea">
+<input id="expression" onchange="run();" onkeyup="run();"  autocomplete="off" placeholder="Enter expression"/>
+<div id="errpos">^</div>
+<div id="result">&nbsp;</div>
+</div>
+</body>
